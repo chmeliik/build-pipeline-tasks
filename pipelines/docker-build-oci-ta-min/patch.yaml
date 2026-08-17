@@ -40,59 +40,101 @@
 
 # clone-repository
 - op: test
-  path: /spec/tasks/1/taskRef/name
+  path: /spec/tasks/1/taskRef/params/0/value
   value: git-clone-oci-ta
 - op: replace
-  path: /spec/tasks/1/taskRef/name
-  value: git-clone-oci-ta-min
+  path: /spec/tasks/1/taskRef/params
+  value:
+  - name: name
+    value: git-clone-oci-ta-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-git-clone-oci-ta-min:0.2.4@sha256:f90deac0d63b43c7cb3f0b2d83ee56aa7fa18bb493f084286c6a953bbf479d8d
+  - name: kind
+    value: task
 
 # prefetch-dependencies
 - op: test
-  path: /spec/tasks/2/taskRef/name
+  path: /spec/tasks/2/taskRef/params/0/value
   value: prefetch-dependencies-oci-ta
 - op: replace
-  path: /spec/tasks/2/taskRef/name
-  value: prefetch-dependencies-oci-ta-min
+  path: /spec/tasks/2/taskRef/params
+  value:
+  - name: name
+    value: prefetch-dependencies-oci-ta-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-prefetch-dependencies-oci-ta-min:0.3.2@sha256:7f344093a3387d05eeedad1f929743e197212b50ee95ceaebdc74bbe5df05d03
+  - name: kind
+    value: task
 
 # build-container
 - op: test
-  path: /spec/tasks/3/taskRef/name
+  path: /spec/tasks/3/taskRef/params/0/value
   value: buildah-oci-ta
 - op: replace
-  path: /spec/tasks/3/taskRef/name
-  value: buildah-oci-ta-min
+  path: /spec/tasks/3/taskRef/params
+  value:
+  - name: name
+    value: buildah-oci-ta-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-buildah-oci-ta-min:0.10.5@sha256:de644e1dee81463bd47e4e5a33688d4ef40cd963f0a17fccc9cf11ca92eea471
+  - name: kind
+    value: task
 
 # build-image-index
 - op: test
-  path: /spec/tasks/4/taskRef/name
+  path: /spec/tasks/4/taskRef/params/0/value
   value: build-image-index
 - op: replace
-  path: /spec/tasks/4/taskRef/name
-  value: build-image-index-min
+  path: /spec/tasks/4/taskRef/params
+  value:
+  - name: name
+    value: build-image-index-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-build-image-index-min:0.3.1@sha256:70679b88f57130e9a939a6765aacd976a9d66bfa5d1733fcee185dc07be39042
+  - name: kind
+    value: task
 
 # clamav-scan
 - op: test
-  path: /spec/tasks/10/taskRef/name
+  path: /spec/tasks/10/taskRef/params/0/value
   value: clamav-scan
 - op: replace
-  path: /spec/tasks/10/taskRef/name
-  value: clamav-scan-min
+  path: /spec/tasks/10/taskRef/params
+  value:
+  - name: name
+    value: clamav-scan-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-clamav-scan-min:0.3@sha256:9f7f5ca49400455e48ab2a1cce4759c7aab43c9a09e2a81714c8039efea5c811
+  - name: kind
+    value: task
 
 # sast-shell-check
 - op: test
-  path: /spec/tasks/11/taskRef/name
+  path: /spec/tasks/11/taskRef/params/0/value
   value: sast-shell-check-oci-ta
 - op: replace
-  path: /spec/tasks/11/taskRef/name
-  value: sast-shell-check-oci-ta-min
+  path: /spec/tasks/11/taskRef/params
+  value:
+  - name: name
+    value: sast-shell-check-oci-ta-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-sast-shell-check-oci-ta-min:0.1@sha256:b25a46b20e09eacec4e177cdd8d18a31fea38e9e346b49215e6e5044a00b8d85
+  - name: kind
+    value: task
 
 # sast-unicode-check
 - op: test
-  path: /spec/tasks/12/taskRef/name
+  path: /spec/tasks/12/taskRef/params/0/value
   value: sast-unicode-check-oci-ta
 - op: replace
-  path: /spec/tasks/12/taskRef/name
-  value: sast-unicode-check-oci-ta-min
+  path: /spec/tasks/12/taskRef/params
+  value:
+  - name: name
+    value: sast-unicode-check-oci-ta-min
+  - name: bundle
+    value: quay.io/konflux-ci/tekton-catalog/task-sast-unicode-check-oci-ta-min:0.4@sha256:80bf85aebf99a9d26c2d3fae3d90ee6bfe28246e3b0bbd950934ceba764bc067
+  - name: kind
+    value: task
 
 # tpa-scan
 - op: add
@@ -107,8 +149,14 @@
     runAfter:
     - build-image-index
     taskRef:
-      name: tpa-scan
-      version: "0.1"
+      params:
+      - name: name
+        value: tpa-scan
+      - name: bundle
+        value: quay.io/konflux-ci/tekton-catalog/task-tpa-scan:0.1@sha256:6a204cecc1a1091bf928b3db5a4082735c2111f90befdb5b043c498833c02bcf
+      - name: kind
+        value: task
+      resolver: bundles
     when:
     - input: $(params.skip-checks)
       operator: in
@@ -119,42 +167,42 @@
 
 # push-dockerfile
 - op: test
-  path: /spec/tasks/14/taskRef/name
+  path: /spec/tasks/14/taskRef/params/0/value
   value: push-dockerfile-oci-ta
 - op: remove
   path: /spec/tasks/14
 
 # apply-tags
 - op: test
-  path: /spec/tasks/13/taskRef/name
+  path: /spec/tasks/13/taskRef/params/0/value
   value: apply-tags
 - op: remove
   path: /spec/tasks/13
 
 # sast-snyk-check
 - op: test
-  path: /spec/tasks/9/taskRef/name
+  path: /spec/tasks/9/taskRef/params/0/value
   value: sast-snyk-check-oci-ta
 - op: remove
   path: /spec/tasks/9
 
 # ecosystem-cert-preflight-checks
 - op: test
-  path: /spec/tasks/8/taskRef/name
+  path: /spec/tasks/8/taskRef/params/0/value
   value: ecosystem-cert-preflight-checks
 - op: remove
   path: /spec/tasks/8
 
 # clair-scan
 - op: test
-  path: /spec/tasks/7/taskRef/name
+  path: /spec/tasks/7/taskRef/params/0/value
   value: clair-scan
 - op: remove
   path: /spec/tasks/7
 
 # build-source-image
 - op: test
-  path: /spec/tasks/5/taskRef/name
+  path: /spec/tasks/5/taskRef/params/0/value
   value: source-build-oci-ta
 - op: remove
   path: /spec/tasks/5
