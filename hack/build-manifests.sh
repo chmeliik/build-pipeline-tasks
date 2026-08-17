@@ -28,39 +28,44 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 SKIP_TASKS=
 
+: "${ROOT_MANIFESTS_DIR=task}"
+
 warning_message="# WARNING: This is an auto generated file, do not modify this file directly"
 
 main() {
     cd "$SCRIPT_DIR/.."
     local ret=0
-    while read -r task_path
+    while read -r kustomization_yaml_path
     do
-        task_name=$(echo "$task_path" | cut -d'/' -f2)
-        task_dir=$(dirname "$task_path")
+        # Strip leading ./
+        kustomization_yaml_path=${kustomization_yaml_path#./}
 
-        echo "Building task manifest for: $task_dir"
+        resource_name=$(echo "$kustomization_yaml_path" | cut -d'/' -f2)
+        resource_dir=$(dirname "$kustomization_yaml_path")
 
-        # Skip the tasks mentioned in SKIP_TASKS
+        echo "Building manifest for $resource_dir"
+
+        # Skip the resources mentioned in SKIP_TASKS
         skipit=
         for tname in ${SKIP_TASKS};do
-            [[ ${tname} == "${task_name}" ]] && skipit=True
+            [[ ${tname} == "${resource_name}" ]] && skipit=True
         done
         [[ -n ${skipit} ]] && continue
 
-        # Check if there is only one resource in the kustomization file and it is <task_name>.yaml
-        resources=$(yq -r '.resources[]' "$task_path")
-        if [[ "$resources" == "$task_name.yaml" ]]; then
-          echo "Skip generating manifest for the task: $task_dir"
+        # Check if there is only one resource in the kustomization file and it is <resource_name>.yaml
+        resources=$(yq -r '.resources[]' "$kustomization_yaml_path")
+        if [[ "$resources" == "$resource_name.yaml" ]]; then
+          echo "Skip generating manifest for $resource_dir"
           continue
         fi
-        if ! oc kustomize -o "$task_dir/$task_name.yaml" "$task_dir/"; then
-            echo "failed to build task: $task_name" >&2
+        if ! oc kustomize -o "$resource_dir/$resource_name.yaml" "$resource_dir/"; then
+            echo "failed to build $resource_name" >&2
             ret=1
             continue
         fi
         # Add a warning message in the generated file
-        ${SED_CMD} -i "1 i $warning_message" "$task_dir/$task_name.yaml"
-    done < <(find task -type f -name "kustomization.yaml")
+        ${SED_CMD} -i "1 i $warning_message" "$resource_dir/$resource_name.yaml"
+    done < <(find "$ROOT_MANIFESTS_DIR" -type f -name "kustomization.yaml")
 
     exit "$ret"
 
