@@ -17,12 +17,14 @@
   "tekton": {
     "includePaths": [
       ".tekton/**",
-      "task/**"
+      "task/**",
+      "pipelines/**"
     ],
     "packageRules": [
       {
         "matchFileNames": [
-          "task/**"
+          "task/**",
+          "pipelines/**"
         ],
         "schedule": [
           "at any time"
