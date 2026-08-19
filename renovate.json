@@ -17,12 +17,14 @@
   "tekton": {
     "includePaths": [
       ".tekton/**",
-      "task/**"
+      "task/**",
+      "pipelines/**"
     ],
     "packageRules": [
       {
         "matchFileNames": [
-          "task/**"
+          "task/**",
+          "pipelines/**"
         ],
         "schedule": [
           "at any time"
@@ -60,6 +62,14 @@
       "managerFilePatterns": ["task/**/recipe.yaml", "task/**/patch.yaml"],
       "matchStrings": [
         "image: (?:['\"])?(?<depName>[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})(?:['\"])?"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["pipelines/**/patch.yaml"],
+      "matchStrings": [
+        "value: (?:['\"])?(?<depName>[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})(?:['\"])?"
       ],
       "datasourceTemplate": "docker"
     }
