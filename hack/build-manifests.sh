@@ -28,7 +28,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 SKIP_TASKS=
 
-: "${ROOT_MANIFESTS_DIR=task}"
+: "${ROOT_MANIFESTS_DIR=.}"
 
 warning_message="# WARNING: This is an auto generated file, do not modify this file directly"
 
