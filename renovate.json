@@ -40,6 +40,17 @@
           "quay.io/konflux-ci/hermeto"
         ],
         "enabled": false
+      },
+      {
+        "groupName": "pipeline bundle tasks",
+        "matchFileNames": [
+          "pipelines/**"
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       }
     ]
   },
