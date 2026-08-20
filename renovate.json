@@ -59,7 +59,12 @@
           "quay.io/konflux-ci/tekton-catalog/task-push-dockerfile-oci-ta",
           "quay.io/konflux-ci/tekton-catalog/task-source-build",
           "quay.io/konflux-ci/tekton-catalog/task-source-build-oci-ta"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       },
       {
         "groupName": "build-prefetch pipeline tasks",
@@ -67,7 +72,12 @@
           "quay.io/konflux-ci/tekton-catalog/task-prefetch-dependencies",
           "quay.io/konflux-ci/tekton-catalog/task-prefetch-dependencies-oci-ta",
           "quay.io/konflux-ci/tekton-catalog/task-prefetch-dependencies-oci-ta-min"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       },
       {
         "groupName": "integration pipeline tasks",
@@ -77,13 +87,23 @@
           "quay.io/konflux-ci/tekton-catalog/task-clamav-scan-min",
           "quay.io/konflux-ci/tekton-catalog/task-deprecated-image-check",
           "quay.io/konflux-ci/tekton-catalog/task-tpa-scan"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       },
       {
         "groupName": "preflight pipeline tasks",
         "matchDepNames": [
           "quay.io/konflux-ci/tekton-catalog/task-ecosystem-cert-preflight-checks"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       },
       {
         "groupName": "sast pipeline tasks",
@@ -96,13 +116,23 @@
           "quay.io/konflux-ci/tekton-catalog/task-sast-unicode-check",
           "quay.io/konflux-ci/tekton-catalog/task-sast-unicode-check-oci-ta",
           "quay.io/konflux-ci/tekton-catalog/task-sast-unicode-check-oci-ta-min"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       },
       {
         "groupName": "vanguard pipeline tasks",
         "matchDepNames": [
           "quay.io/konflux-ci/tekton-catalog/task-rpms-signature-scan"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       },
       {
         "groupName": "operator pipeline tasks",
@@ -112,7 +142,12 @@
           "quay.io/konflux-ci/tekton-catalog/task-fbc-target-index-pruning-check",
           "quay.io/konflux-ci/tekton-catalog/task-run-opm-command-oci-ta",
           "quay.io/konflux-ci/tekton-catalog/task-validate-fbc"
-        ]
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       }
     ]
   },
