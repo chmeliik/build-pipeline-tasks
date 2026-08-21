@@ -70,7 +70,10 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["task/**/recipe.yaml", "task/**/patch.yaml"],
+      "managerFilePatterns": [
+        "task/**/recipe.yaml",
+        "task/**/patch.yaml"
+      ],
       "matchStrings": [
         "image: (?:['\"])?(?<depName>[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})(?:['\"])?"
       ],
@@ -78,7 +81,9 @@
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["pipelines/**/patch.yaml"],
+      "managerFilePatterns": [
+        "pipelines/**/patch.yaml"
+      ],
       "matchStrings": [
         "value: (?:['\"])?(?<depName>[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})(?:['\"])?"
       ],
@@ -86,16 +91,16 @@
     }
   ],
   "packageRules": [
-      {
-        "groupName": "pipeline bundle tasks",
-        "matchFileNames": [
-          "pipelines/**"
-        ],
-        "branchPrefix": "konflux/mintmaker/",
-        "additionalBranchPrefix": "{{baseBranch}}/",
-        "group": {
-          "branchTopic": "{{{groupSlug}}}"
-        }
+    {
+      "groupName": "pipeline bundle tasks",
+      "matchFileNames": [
+        "pipelines/**"
+      ],
+      "branchPrefix": "konflux/mintmaker/",
+      "additionalBranchPrefix": "{{baseBranch}}/",
+      "group": {
+        "branchTopic": "{{{groupSlug}}}"
       }
+    }
   ]
 }
