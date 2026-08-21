@@ -92,6 +92,12 @@
   ],
   "packageRules": [
     {
+      "matchPackageNames": [
+        "/^quay.io/konflux-ci/tekton-catalog//"
+      ],
+      "versioning": "semver-coerced"
+    },
+    {
       "groupName": "pipeline bundle tasks",
       "matchFileNames": [
         "pipelines/**"
