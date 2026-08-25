@@ -4,17 +4,16 @@ metadata:
   annotations:
     build.appstudio.openshift.io/repo: https://github.com/chmeliik/build-pipeline-tasks?rev={{revision}}
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
-    pipelinesascode.tekton.dev/cancel-in-progress: "true"
+    pipelinesascode.tekton.dev/cancel-in-progress: "false"
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "main"
   labels:
     appstudio.openshift.io/application: container-build-catalog
     appstudio.openshift.io/component: container-build-catalog
     pipelines.appstudio.openshift.io/type: build
-  name: container-build-catalog-on-pull-request
+  name: container-build-catalog-on-push
   namespace: acmiel-tenant
 spec:
   params:
@@ -23,11 +22,11 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads-stage/acmiel-tenant/container-build-catalog:on-pr-{{revision}}
-  - name: image-expires-after
-    value: 5d
+    value: quay.io/redhat-user-workloads-stage/acmiel-tenant/container-build-catalog:{{revision}}
   - name: dockerfile
     value: Dockerfile
+  - name: path-context
+    value: pipelines/docker-build
   pipelineSpec:
     params:
     - description: Source Repository URL
