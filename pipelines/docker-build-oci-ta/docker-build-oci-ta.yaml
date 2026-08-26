@@ -104,6 +104,12 @@ spec:
       etc.) from the resulting image.
     name: omit-history
     type: string
+  - default: 'default value'
+    description: >
+      A multliline YAML
+      description
+      string
+    name: "param-name"
   results:
   - description: ""
     name: IMAGE_URL

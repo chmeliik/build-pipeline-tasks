@@ -110,6 +110,12 @@ spec:
       set of values is determined by the configuration of the multi-platform-controller.
     name: build-platforms
     type: array
+  - default: 'default value'
+    description: >
+      A multliline YAML
+      description
+      string
+    name: "param-name"
   results:
   - description: ""
     name: IMAGE_URL
