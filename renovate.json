@@ -58,9 +58,10 @@
     "packageRules": [
       {
         "matchFileNames": [
-          "task-generator/**"
+          "task-generator/**",
+          "pipeline-generator/**"
         ],
-        "groupName": "task-generator",
+        "groupName": "generators",
         "schedule": [
           "monthly"
         ]
