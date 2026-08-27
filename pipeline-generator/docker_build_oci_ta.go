@@ -89,5 +89,6 @@ func GenerateDockerBuildOciTa(dockerBuild tektonapi.Pipeline, existing *tektonap
 	)
 	p.AddTaskParam("push-dockerfile", "SOURCE_ARTIFACT", StringValue("$(tasks.prefetch-dependencies.results.SOURCE_ARTIFACT)"))
 
+	p.ReorderArrays()
 	return p.Pipeline, nil
 }

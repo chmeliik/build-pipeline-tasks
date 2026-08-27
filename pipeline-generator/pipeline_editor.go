@@ -158,6 +158,50 @@ func (p *PipelineEditor) AddTaskMatrixParam(pipelineTaskName string, paramName s
 	task.Matrix.Params = append(task.Matrix.Params, tektonapi.Param{Name: paramName, Value: *value})
 }
 
+// ReorderArrays reorders relevant arrays in p.Pipeline
+// to better match the corresponding arrays in p.existing, if any.
+//
+// The "relevant" arrays are the ones that we expect to be edited by migration scripts.
+func (p *PipelineEditor) ReorderArrays() {
+	if p.existing == nil {
+		return
+	}
+
+	reorder(p.Pipeline.Spec.Params, p.existing.Spec.Params,
+		func(p tektonapi.ParamSpec) string { return p.Name })
+
+	reorder(p.Pipeline.Spec.Results, p.existing.Spec.Results,
+		func(r tektonapi.PipelineResult) string { return r.Name })
+
+	reorder(p.Pipeline.Spec.Tasks, p.existing.Spec.Tasks,
+		func(t tektonapi.PipelineTask) string { return t.Name })
+
+	existingTasks := make(map[string]*tektonapi.PipelineTask)
+	for _, et := range p.existing.Spec.Tasks {
+		existingTasks[et.Name] = &et
+	}
+
+	for _, task := range p.Pipeline.Spec.Tasks {
+		exTask := existingTasks[task.Name]
+		if exTask == nil {
+			continue
+		}
+
+		reorder(task.Params, exTask.Params,
+			func(p tektonapi.Param) string { return p.Name })
+
+		if task.Matrix != nil && exTask.Matrix != nil {
+			reorder(task.Matrix.Params, exTask.Matrix.Params,
+				func(p tektonapi.Param) string { return p.Name })
+		}
+
+		reorder(task.When, exTask.When,
+			func(w tektonapi.WhenExpression) string { return w.Input })
+
+		reorder(task.RunAfter, exTask.RunAfter, func(s string) string { return s })
+	}
+}
+
 func (p *PipelineEditor) findTask(pipelineTaskName string) *tektonapi.PipelineTask {
 	for i := range p.Pipeline.Spec.Tasks {
 		pt := &p.Pipeline.Spec.Tasks[i]
@@ -199,4 +243,84 @@ func (p *PipelineEditor) getExistingBundleRef(taskName string) string {
 	}
 
 	return ""
+}
+
+// reorder reorders newItems to match the order in existingItems.
+// Items that do not have a counterpart in existingItems keep their original position
+// (as if "inserted into" the order defined by existingItems).
+func reorder[T any, K comparable](newItems []T, existingItems []T, key func(T) K) {
+	if len(newItems) > 0 && len(existingItems) > 0 {
+		copy(newItems, matchOrder(newItems, existingItems, key))
+	}
+}
+
+// matchOrder implements reorder, but returns a new slice instead of modifying the input.
+func matchOrder[T any, K comparable](newItems []T, existingItems []T, key func(T) K) []T {
+	newKeys := mapfn(key, newItems)
+	existingKeys := mapfn(key, existingItems)
+
+	uniqueExisting := multisetDifference(existingKeys, newKeys)
+	uniqueNew := multisetDifference(newKeys, existingKeys)
+
+	// matchIndices tracks where items of a given key should go in the reordered array.
+	// The i-th occurence (0-based) of an item with key k should go to matchIndices[k][i].
+	matchIndices := make(map[K][]int)
+	matchIndex := 0
+	for i, k := range existingKeys {
+		if slices.Contains(uniqueExisting, i) {
+			continue
+		}
+		for slices.Contains(uniqueNew, matchIndex) {
+			// Find the next index not occupied by a unique new item (those keep their position)
+			// Happens at most len(uniqueNew) times
+			matchIndex++
+		}
+		// Happens exactly len(intersection of new and existing) times
+		matchIndices[k] = append(matchIndices[k], matchIndex)
+		matchIndex++
+	}
+
+	reordered := make([]T, len(newItems))
+	for i, k := range newKeys {
+		if indices := matchIndices[k]; len(indices) > 0 {
+			// Item in the intersection, move to matching index
+			j := indices[0]
+			matchIndices[k] = indices[1:]
+			reordered[j] = newItems[i]
+		} else {
+			// Unique item, keep original position
+			reordered[i] = newItems[i]
+		}
+	}
+	return reordered
+}
+
+func mapfn[A any, B any](fn func(A) B, items []A) []B {
+	itemsB := make([]B, len(items))
+	for i, item := range items {
+		itemsB[i] = fn(item)
+	}
+	return itemsB
+}
+
+// Computes the multiset difference a \ b, returns indices of unique elements in a.
+// Example:
+// - a = {'a', 'b', 'c', 'a', 'b'}
+// - b = {'a', 'b', 'a'}
+// - multisetDifference(a, b) = {2, 4} (the 'c' element and the second 'b' element)
+func multisetDifference[T comparable](a []T, b []T) []int {
+	bCount := make(map[T]int)
+	for _, item := range b {
+		bCount[item]++
+	}
+
+	var unique []int
+	for i, item := range a {
+		if bCount[item] == 0 {
+			unique = append(unique, i)
+		} else {
+			bCount[item]--
+		}
+	}
+	return unique
 }
