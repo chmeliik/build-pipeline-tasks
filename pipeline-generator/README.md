@@ -11,6 +11,8 @@ Importantly, the generation takes into account the existing target pipeline:
 
 - Prefers the resolved bundle references from the existing pipeline
   rather than the ones specified in the code.
+- Respects the ordering of arrays in the existing pipeline,
+  mainly the ones that are often the targets of migration script edits.
 
 On top of that, the [`../hack/generate-pipelines.sh`](../hack/generate-pipelines.sh)
 script implements the up-to-date check in such a way that cosmetic-only changes
@@ -19,6 +21,8 @@ do not cause CI failures.
 The goal is to make the generator get out of the way of MintMaker updates:
 
 - Task bundles can get updates without requiring generator changes.
+- Migration scripts can insert parameters, new tasks and whatnot at arbitrary positions
+  without requiring generator changes.
 - Migration scripts can make changes that don't agree stylistically with the generator
   without causing CI failure.
 
@@ -30,7 +34,8 @@ The goal is to make the generator get out of the way of MintMaker updates:
 - Not all migrations will pass without generator changes, manual fixes will be required
   every once in a while.
 - Deleting an existing pipeline and generating from scratch would have different results
-  than re-running against the existing file:
+  than re-running against the existing file. The differences would be mostly cosmetic
+  (array ordering, which is unimportant) with one important exception:
   - Due to respecting existing task bundle references, running the generator from scratch
     would likely downgrade the bundle references compared to the original state.
 

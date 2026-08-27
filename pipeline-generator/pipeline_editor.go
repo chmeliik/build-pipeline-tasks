@@ -158,6 +158,50 @@ func (p *PipelineEditor) AddTaskMatrixParam(pipelineTaskName string, paramName s
 	task.Matrix.Params = append(task.Matrix.Params, tektonapi.Param{Name: paramName, Value: *value})
 }
 
+// ReorderArrays reorders relevant arrays in p.Pipeline
+// to better match the corresponding arrays in p.existing, if any.
+//
+// The "relevant" arrays are the ones that we expect to be edited by migration scripts.
+func (p *PipelineEditor) ReorderArrays() {
+	if p.existing == nil {
+		return
+	}
+
+	reorder(p.Pipeline.Spec.Params, p.existing.Spec.Params,
+		func(p tektonapi.ParamSpec) string { return p.Name })
+
+	reorder(p.Pipeline.Spec.Results, p.existing.Spec.Results,
+		func(r tektonapi.PipelineResult) string { return r.Name })
+
+	reorder(p.Pipeline.Spec.Tasks, p.existing.Spec.Tasks,
+		func(t tektonapi.PipelineTask) string { return t.Name })
+
+	existingTasks := make(map[string]*tektonapi.PipelineTask)
+	for _, et := range p.existing.Spec.Tasks {
+		existingTasks[et.Name] = &et
+	}
+
+	for _, task := range p.Pipeline.Spec.Tasks {
+		exTask := existingTasks[task.Name]
+		if exTask == nil {
+			continue
+		}
+
+		reorder(task.Params, exTask.Params,
+			func(p tektonapi.Param) string { return p.Name })
+
+		if task.Matrix != nil && exTask.Matrix != nil {
+			reorder(task.Matrix.Params, exTask.Matrix.Params,
+				func(p tektonapi.Param) string { return p.Name })
+		}
+
+		reorder(task.When, exTask.When,
+			func(w tektonapi.WhenExpression) string { return w.Input })
+
+		reorder(task.RunAfter, exTask.RunAfter, func(s string) string { return s })
+	}
+}
+
 func (p *PipelineEditor) findTask(pipelineTaskName string) *tektonapi.PipelineTask {
 	for i := range p.Pipeline.Spec.Tasks {
 		pt := &p.Pipeline.Spec.Tasks[i]
@@ -199,4 +243,53 @@ func (p *PipelineEditor) getExistingBundleRef(taskName string) string {
 	}
 
 	return ""
+}
+
+// reorder reorders items to match the order in toMatch.
+// Items that do not have a counterpart in toMatch move to the end.
+func reorder[T any, K comparable](items []T, toMatch []T, key func(T) K) {
+	if len(items) > 0 && len(toMatch) > 0 {
+		copy(items, matchOrder(items, toMatch, key))
+	}
+}
+
+// matchOrder implements reorder, but returns a new slice instead of modifying the input.
+func matchOrder[T any, K comparable](items []T, toMatch []T, key func(T) K) []T {
+	itemCounts := make(map[K]int)
+	for _, item := range items {
+		itemCounts[key(item)]++
+	}
+
+	matchIndices := make(map[K][]int)
+	// matchIndex is the index of the next item in toMatch that also appears in items.
+	// (More accurately: an item whose key is the same as the key of an item in items,
+	//  and whose key hasn't been seen more times than the number of its occurrences in items.)
+	// The index is counted as if toMatch didn't contain any non-matching items.
+	// If there are no more matching items, matchIndex equals the size of the intersection.
+	matchIndex := 0
+	for _, item := range toMatch {
+		k := key(item)
+		if itemCounts[k] > 0 {
+			matchIndices[k] = append(matchIndices[k], matchIndex)
+			matchIndex++
+			itemCounts[k]--
+		}
+	}
+
+	reordered := make([]T, len(items))
+	for _, item := range items {
+		k := key(item)
+		if indices := matchIndices[k]; len(indices) > 0 {
+			i := indices[0]
+			matchIndices[k] = indices[1:]
+			reordered[i] = item
+		} else {
+			// matchIndex is the size of the intersection (or was, before we incremented it),
+			// so the section for unique items starts at matchIndex
+			reordered[matchIndex] = item
+			matchIndex++
+		}
+	}
+
+	return reordered
 }

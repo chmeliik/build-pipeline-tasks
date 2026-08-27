@@ -45,5 +45,6 @@ func GenerateDockerBuildMultiPlatform(dockerBuildOciTa tektonapi.Pipeline, exist
 		Default:     ArrayValue("linux/x86_64"),
 	})
 
+	p.ReorderArrays()
 	return p.Pipeline, nil
 }

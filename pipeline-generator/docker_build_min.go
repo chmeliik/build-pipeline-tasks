@@ -90,5 +90,6 @@ func GenerateDockerBuildMin(dockerBuildOciTa tektonapi.Pipeline, existing *tekto
 	// build-source-image param is only used by the removed build-source-image task.
 	p.RemoveParam("build-source-image")
 
+	p.ReorderArrays()
 	return p.Pipeline, nil
 }
