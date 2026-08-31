@@ -11,6 +11,13 @@ If that's not something you ever plan to do, consider removing this section.
 
 *Nothing yet.*
 
+## 0.12.1
+
+### Changed
+
+- Bump `prepare-sboms` step memory from 256Mi to 512Mi (requests = limits) to prevent OOM kills on large container images (GPU/ML, bootc, driver-toolkit).
+- Remove `prepare-sboms` CPU limit (was 100m) to allow burst CPU and prevent throttling. CPU requests remain at 100m.
+
 ## 0.12.0
 
 ### Changed

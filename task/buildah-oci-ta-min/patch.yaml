@@ -46,7 +46,7 @@
 - op: replace
   path: /spec/steps/2/computeResources/requests/memory
   value: 256Mi
-- op: replace
+- op: add
   path: /spec/steps/2/computeResources/limits/cpu
   value: 100m
 - op: replace
