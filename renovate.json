@@ -67,7 +67,9 @@
         ]
       },
       {
-        "matchDepTypes": ["indirect"],
+        "matchDepTypes": [
+          "indirect"
+        ],
         "enabled": false
       }
     ]
@@ -75,9 +77,22 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["task/**/recipe.yaml", "task/**/patch.yaml"],
+      "managerFilePatterns": [
+        "task/**/recipe.yaml",
+        "task/**/patch.yaml"
+      ],
       "matchStrings": [
         "image: (?:['\"])?(?<depName>[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})(?:['\"])?"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "pipeline-generator/docker_build*.go"
+      ],
+      "matchStrings": [
+        "\"(?<depName>quay.io/[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})\""
       ],
       "datasourceTemplate": "docker"
     },
@@ -91,6 +106,19 @@
         "value: (?:['\"])?(?<depName>[0-9a-z./-]+)(?::(?<currentValue>[0-9a-z.-]+))?@(?<currentDigest>sha256:[a-f0-9]{64})(?:['\"])?"
       ],
       "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "groupName": "pipeline bundle tasks",
+      "matchFileNames": [
+        "pipeline-generator/docker_build*.go"
+      ],
+      "branchPrefix": "konflux/mintmaker/",
+      "additionalBranchPrefix": "{{baseBranch}}/",
+      "group": {
+        "branchTopic": "{{{groupSlug}}}"
+      }
     }
   ]
 }
