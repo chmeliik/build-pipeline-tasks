@@ -11,6 +11,12 @@ If that's not something you ever plan to do, consider removing this section.
 
 *Nothing yet.*
 
+## 0.3.1
+
+### Changed
+
+- Nothing. Started using semver specification for version labels.
+
 ## 0.3
 
 - Switched from bash implementation to Konflux Build CLI.
