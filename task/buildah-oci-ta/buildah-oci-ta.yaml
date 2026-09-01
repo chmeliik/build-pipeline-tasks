@@ -7,7 +7,7 @@ metadata:
     tekton.dev/pipelines.minVersion: 0.12.1
     tekton.dev/tags: image-build, konflux
   labels:
-    app.kubernetes.io/version: 0.12.0
+    app.kubernetes.io/version: 0.12.1
     build.appstudio.redhat.com/build_type: docker
 spec:
   description: |-
@@ -792,11 +792,10 @@ spec:
         echo "[$(date --utc -Ins)] End prepare-sboms"
       computeResources:
         limits:
-          cpu: 100m
-          memory: 256Mi
+          memory: 512Mi
         requests:
           cpu: 100m
-          memory: 256Mi
+          memory: 512Mi
       securityContext:
         runAsUser: 0
     - name: upload-sbom

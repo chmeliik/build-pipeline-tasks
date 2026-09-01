@@ -11,6 +11,12 @@ If that's not something you ever plan to do, consider removing this section.
 
 *Nothing yet.*
 
+## 0.12.1
+
+### Fixed
+
+- Fix kustomize patch to use `add` instead of `replace` for `prepare-sboms` CPU limit, since the base task no longer defines `limits.cpu`. Resource values for `-min` are unchanged (256Mi / 100m).
+
 ## 0.12.0
 
 ### Changed
