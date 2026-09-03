@@ -151,7 +151,7 @@ spec:
           done
 
           if [[ -z "${changed_files// }" ]]; then
-            echo "[ERROR] No changed files found for PR #${PULL_REQUEST_NUMBER}. Check that the PR number is valid."
+            echo "[ERROR] No changed files found for PR #${PULL_REQUEST_NUMBER}. Check that the PR number is valid." >&2
             return 1
           fi
 
@@ -160,7 +160,7 @@ spec:
           changed_tasks=$(echo "$changed_files" | grep '^task/' | awk -F'/' '{print $2}' | sort -u)
 
           if [[ -z "$changed_tasks" ]]; then
-            echo "No task directories were changed in PR #${PULL_REQUEST_NUMBER}"
+            echo "No task directories were changed in PR #${PULL_REQUEST_NUMBER}" >&2
             return 0
           fi
 
