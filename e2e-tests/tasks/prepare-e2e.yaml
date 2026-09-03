@@ -254,6 +254,11 @@ spec:
           exit 1
         fi
 
+        if [[ -z "$changed_tasks" ]]; then
+            echo "No tasks changed, no need to continue"
+            exit 0
+        fi
+
         # Write each environment variable to its respective result file
         echo -n "$EVENT_TYPE" > "$(results.test-event-type.path)"
         echo -n "$PULL_REQUEST_NUMBER" > "$(results.pull-request-number.path)"
