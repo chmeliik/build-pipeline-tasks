@@ -17,12 +17,14 @@
   "tekton": {
     "includePaths": [
       ".tekton/**",
-      "task/**"
+      "task/**",
+      "pipelines/**"
     ],
     "packageRules": [
       {
         "matchFileNames": [
-          "task/**"
+          "task/**",
+          "pipelines/**"
         ],
         "schedule": [
           "at any time"
@@ -38,6 +40,17 @@
           "quay.io/konflux-ci/hermeto"
         ],
         "enabled": false
+      },
+      {
+        "groupName": "pipeline bundle tasks",
+        "matchFileNames": [
+          "pipelines/**"
+        ],
+        "branchPrefix": "konflux/mintmaker/",
+        "additionalBranchPrefix": "{{baseBranch}}/",
+        "group": {
+          "branchTopic": "{{{groupSlug}}}"
+        }
       }
     ]
   },
@@ -45,9 +58,10 @@
     "packageRules": [
       {
         "matchFileNames": [
-          "task-generator/**"
+          "task-generator/**",
+          "pipeline-generator/**"
         ],
-        "groupName": "task-generator",
+        "groupName": "generators",
         "schedule": [
           "monthly"
         ]
