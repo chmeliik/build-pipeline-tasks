@@ -10,7 +10,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.28.0
 	github.com/onsi/gomega v1.39.1
 	github.com/openshift/library-go v0.0.0-20220525173854-9b950a41acdc
-	github.com/tektoncd/pipeline v1.9.2
+	github.com/tektoncd/pipeline v1.16.0
 	k8s.io/api v0.35.2
 	k8s.io/apimachinery v0.35.2
 	knative.dev/pkg v0.0.0-20250424013628-d5e74d29daa3
