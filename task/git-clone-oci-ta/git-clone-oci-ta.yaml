@@ -276,7 +276,7 @@ spec:
       securityContext:
         runAsUser: 0
     - name: create-trusted-artifact
-      image: quay.io/konflux-ci/build-trusted-artifacts:latest@sha256:a61ef5dfee9a8720f7bc2d1d52001057ca6a22d2ddbae0db175b11d9ab95105a
+      image: quay.io/konflux-ci/build-trusted-artifacts:latest@sha256:15c5eeb451924ddfc9d8680319130fe277df7850728d5c37f13ae3eb9d607249
       args:
         - create
         - --store
