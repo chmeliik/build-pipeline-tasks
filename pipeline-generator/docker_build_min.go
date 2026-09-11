@@ -27,37 +27,37 @@ func GenerateDockerBuildMin(dockerBuildOciTa tektonapi.Pipeline, existing *tekto
 	p.SetTaskRef(
 		"clone-repository",
 		"git-clone-oci-ta-min",
-		"quay.io/konflux-ci/tekton-catalog/task-git-clone-oci-ta-min:0.2.4@sha256:f90deac0d63b43c7cb3f0b2d83ee56aa7fa18bb493f084286c6a953bbf479d8d",
+		"quay.io/konflux-ci/tekton-catalog/task-git-clone-oci-ta-min:0.2.6@sha256:94655465e278077b89d8a1e3f6255166f5c8c0c2acb5622c7f6f60a000e579e0",
 	)
 	p.SetTaskRef(
 		"prefetch-dependencies",
 		"prefetch-dependencies-oci-ta-min",
-		"quay.io/konflux-ci/tekton-catalog/task-prefetch-dependencies-oci-ta-min:0.3.2@sha256:7f344093a3387d05eeedad1f929743e197212b50ee95ceaebdc74bbe5df05d03",
+		"quay.io/konflux-ci/tekton-catalog/task-prefetch-dependencies-oci-ta-min:0.10.3@sha256:4e47f8cfd1bc369b911d24bbe9cf4c14726cbcc8cd038ef2e5a29d2a3e5f0bf7",
 	)
 	p.SetTaskRef(
 		"build-container",
 		"buildah-oci-ta-min",
-		"quay.io/konflux-ci/tekton-catalog/task-buildah-oci-ta-min:0.10.5@sha256:de644e1dee81463bd47e4e5a33688d4ef40cd963f0a17fccc9cf11ca92eea471",
+		"quay.io/konflux-ci/tekton-catalog/task-buildah-oci-ta-min:0.12.1@sha256:e50f865f46c50a81738bba37372fd7abdba5d83896385a88e6a0a0df37a36086",
 	)
 	p.SetTaskRef(
 		"build-image-index",
 		"build-image-index-min",
-		"quay.io/konflux-ci/tekton-catalog/task-build-image-index-min:0.3.1@sha256:70679b88f57130e9a939a6765aacd976a9d66bfa5d1733fcee185dc07be39042",
+		"quay.io/konflux-ci/tekton-catalog/task-build-image-index-min:0.3.1@sha256:ef401ea62e96f3496f4e1c7bbd9bcc87c18ecd64ba7e1d53d699b3a9c38ebf83",
 	)
 	p.SetTaskRef(
 		"clamav-scan",
 		"clamav-scan-min",
-		"quay.io/konflux-ci/tekton-catalog/task-clamav-scan-min:0.3@sha256:9f7f5ca49400455e48ab2a1cce4759c7aab43c9a09e2a81714c8039efea5c811",
+		"quay.io/konflux-ci/tekton-catalog/task-clamav-scan-min:0.3@sha256:622969ce15bd536b4605b98900e4b5378dfde0df536414a40e76df1df75c8635",
 	)
 	p.SetTaskRef(
 		"sast-shell-check",
 		"sast-shell-check-oci-ta-min",
-		"quay.io/konflux-ci/tekton-catalog/task-sast-shell-check-oci-ta-min:0.1@sha256:b25a46b20e09eacec4e177cdd8d18a31fea38e9e346b49215e6e5044a00b8d85",
+		"quay.io/konflux-ci/tekton-catalog/task-sast-shell-check-oci-ta-min:0.1@sha256:e1f2b88cda75910c3d74bc3851a98e51e8fe8807fc62102beb455aada6515c57",
 	)
 	p.SetTaskRef(
 		"sast-unicode-check",
 		"sast-unicode-check-oci-ta-min",
-		"quay.io/konflux-ci/tekton-catalog/task-sast-unicode-check-oci-ta-min:0.4@sha256:80bf85aebf99a9d26c2d3fae3d90ee6bfe28246e3b0bbd950934ceba764bc067",
+		"quay.io/konflux-ci/tekton-catalog/task-sast-unicode-check-oci-ta-min:0.4@sha256:6f592a60e0a3aec0f8330a264b3bcfb559742fd1f3af07b12103e6cbc0e902a5",
 	)
 
 	// Add the TPA scan task.
@@ -76,7 +76,7 @@ func GenerateDockerBuildMin(dockerBuildOciTa tektonapi.Pipeline, existing *tekto
 	p.SetTaskRef(
 		"tpa-scan",
 		"tpa-scan",
-		"quay.io/konflux-ci/tekton-catalog/task-tpa-scan:0.1@sha256:6a204cecc1a1091bf928b3db5a4082735c2111f90befdb5b043c498833c02bcf",
+		"quay.io/konflux-ci/tekton-catalog/task-tpa-scan:0.1@sha256:3c69ebf5b740229f2cee531889ed885a96b83bc374c2eeaaea662cf4be0823c4",
 	)
 
 	// Drop the checks and steps not wanted in the minimal pipeline.
