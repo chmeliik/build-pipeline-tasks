@@ -835,7 +835,7 @@ spec:
       requests:
         cpu: 100m
         memory: 256Mi
-    image: quay.io/konflux-ci/mobster:2.1.0@sha256:3eee4ecf87d50cb073318ab96097b9ea2cb6e5e59dd296a212e57017a9059f61
+    image: quay.io/konflux-ci/mobster:2.3.0@sha256:69873bf781fdf09cf8db9f2fd3a829e1b3f69319e75e3ab249cc5c002970f3d4
     name: prepare-sboms
     script: |
       #!/bin/bash
