@@ -21,7 +21,7 @@ func GenerateDockerBuildMultiPlatform(dockerBuildOciTa tektonapi.Pipeline, exist
 	p.SetTaskRef(
 		"build-images",
 		"buildah-remote-oci-ta",
-		"quay.io/konflux-ci/tekton-catalog/task-buildah-remote-oci-ta:0.10.5@sha256:eb277ec7b44443f0506a60ac940a2e52178d60f17cb0f51a6966daed5b3755de",
+		"quay.io/konflux-ci/tekton-catalog/task-buildah-remote-oci-ta:0.16.0@sha256:c2eaa982e7c5ba6b2f94a48d41cfd1ed3c0a162e40e081c5dbce95c75391745e",
 	)
 	p.AddTaskMatrixParam("build-images", "PLATFORM", ArrayValue("$(params.build-platforms)"))
 	p.AddTaskParam("build-images", "IMAGE_APPEND_PLATFORM", StringValue("true"))
